@@ -1,3 +1,13 @@
+# Config Map Details Should not be checked in SCM tools. Instead create configMaps using commands or ymls directly in respective clusters.
+---
+kind: ConfigMap 
+apiVersion: v1 
+metadata:
+  name: mysql-configmap 
+data:
+  # Configuration values can be set as key-value properties
+  password: devdb@123
+  
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -25,8 +35,8 @@ spec:
           env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
-               secretKeyRef:
-                  name: mysql-pass
+               configMapKeyRef:
+                  name: mysql-configmap
                   key: password
           ports:
             - containerPort: 3306
